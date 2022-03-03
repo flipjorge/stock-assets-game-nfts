@@ -6,8 +6,16 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract Hero is ERC721 {
-    
+
+    uint private _tokenId;
+
     constructor() ERC721("StockAssetHero", "SAH") {
-        console.log("Stock Asset Hero is ready!");
+        //
+    }
+
+    function mint() public {
+        
+        _tokenId += 1;
+        _safeMint(msg.sender, _tokenId);
     }
 }
