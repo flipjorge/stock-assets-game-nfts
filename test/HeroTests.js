@@ -15,7 +15,7 @@ describe("Hero Tests", () => {
 
     it("First mint should start with id 1", async () => {
         
-        expect(await heroContract.mint())
+        await expect(await heroContract.mint())
         .to.emit(heroContract, "Transfer")
         .withArgs(ethers.constants.AddressZero, owner.address, 1)
     });
