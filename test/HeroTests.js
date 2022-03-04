@@ -28,4 +28,35 @@ describe("Hero Tests", () => {
             .withArgs(ethers.constants.AddressZero, owner.address, i)
         }
     });
+
+    it("Adding an hero template should emit an event with its index as arg", async() => {
+        
+        await expect(await heroContract.addTemplate("Cratos")).to.emit(heroContract, "TemplateAdded").withArgs(0);
+        await expect(await heroContract.addTemplate("Alloy")).to.emit(heroContract, "TemplateAdded").withArgs(1);
+    });
+
+    it("Get all templates should match templates added ", async() => {
+
+        await heroContract.addTemplate("Cratos");
+        await heroContract.addTemplate("Alloy");
+
+        const templates = await heroContract.getTemplates();
+        
+        expect(templates.length).to.be.equal(2);
+        expect(templates[0].name).to.be.equal("Cratos");
+        expect(templates[1].name).to.be.equal("Alloy");
+    });
+
+    it("Get template by index should match templates added", async() => {
+        
+        await heroContract.addTemplate("Cratos");
+        await heroContract.addTemplate("Alloy");
+
+        let template = await heroContract.getTemplate(0);
+        expect(template.name).to.be.equal("Cratos");
+
+        template = await heroContract.getTemplate(1);
+        expect(template.name).to.be.equal("Alloy");
+    });
+
 });
