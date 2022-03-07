@@ -6,10 +6,12 @@ async function main() {
 
   console.log("Hero deployed to:", heroContract.address);
 
-  let mintTx = await heroContract.mint();
-  const receipt = await mintTx.wait();
+  await heroContract.addBlueprint("Cratos");
+  await heroContract.addBlueprint("Aloy");
 
-  mintTx = await heroContract.mint();
+  let mintTx = await heroContract.mint(0);
+  await mintTx.wait();
+  mintTx = await heroContract.mint(1);
   await mintTx.wait();
 }
 
