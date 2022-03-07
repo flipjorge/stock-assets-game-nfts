@@ -29,34 +29,34 @@ describe("Hero Tests", () => {
         }
     });
 
-    it("Adding an hero template should emit an event with its index as arg", async() => {
+    it("Adding an hero blueprint should emit an event with its index as arg", async() => {
         
-        await expect(await heroContract.addTemplate("Cratos")).to.emit(heroContract, "TemplateAdded").withArgs(0);
-        await expect(await heroContract.addTemplate("Alloy")).to.emit(heroContract, "TemplateAdded").withArgs(1);
+        await expect(await heroContract.addBlueprint("Cratos")).to.emit(heroContract, "BlueprintAdded").withArgs(0);
+        await expect(await heroContract.addBlueprint("Alloy")).to.emit(heroContract, "BlueprintAdded").withArgs(1);
     });
 
-    it("Get all templates should match templates added ", async() => {
+    it("Get all blueprints should match blueprints added ", async() => {
 
-        await heroContract.addTemplate("Cratos");
-        await heroContract.addTemplate("Alloy");
+        await heroContract.addBlueprint("Cratos");
+        await heroContract.addBlueprint("Alloy");
 
-        const templates = await heroContract.getTemplates();
+        const blueprints = await heroContract.getBlueprints();
         
-        expect(templates.length).to.be.equal(2);
-        expect(templates[0].name).to.be.equal("Cratos");
-        expect(templates[1].name).to.be.equal("Alloy");
+        expect(blueprints.length).to.be.equal(2);
+        expect(blueprints[0].name).to.be.equal("Cratos");
+        expect(blueprints[1].name).to.be.equal("Alloy");
     });
 
-    it("Get template by index should match templates added", async() => {
+    it("Get blueprint by index should match blueprints added", async() => {
         
-        await heroContract.addTemplate("Cratos");
-        await heroContract.addTemplate("Alloy");
+        await heroContract.addBlueprint("Cratos");
+        await heroContract.addBlueprint("Alloy");
 
-        let template = await heroContract.getTemplate(0);
-        expect(template.name).to.be.equal("Cratos");
+        let blueprint = await heroContract.getBlueprint(0);
+        expect(blueprint.name).to.be.equal("Cratos");
 
-        template = await heroContract.getTemplate(1);
-        expect(template.name).to.be.equal("Alloy");
+        blueprint = await heroContract.getBlueprint(1);
+        expect(blueprint.name).to.be.equal("Alloy");
     });
 
 });

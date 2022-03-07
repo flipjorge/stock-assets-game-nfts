@@ -19,31 +19,31 @@ contract Hero is ERC721 {
         _safeMint(msg.sender, _tokenId);
     }
 
-    //Template
-    event TemplateAdded(uint index);
+    //Blueprint
+    event BlueprintAdded(uint index);
 
-    struct Template {
+    struct Blueprint {
         string name;
     }
 
-    Template[] templates;
+    Blueprint[] blueprints;
 
-    function addTemplate(string memory name) public {
-        Template memory template = Template({
+    function addBlueprint(string memory name) public {
+        Blueprint memory blueprint = Blueprint({
             name: name
         });
 
-        uint _index = templates.length;
-        templates.push(template);
+        uint _index = blueprints.length;
+        blueprints.push(blueprint);
 
-        emit TemplateAdded(_index);
+        emit BlueprintAdded(_index);
     }
     
-    function getTemplate(uint index) public view returns(Template memory) {
-        return templates[index];
+    function getBlueprint(uint index) public view returns(Blueprint memory) {
+        return blueprints[index];
     }
 
-    function getTemplates() public view returns(Template[] memory) {
-        return templates;
+    function getBlueprints() public view returns(Blueprint[] memory) {
+        return blueprints;
     }
 }
