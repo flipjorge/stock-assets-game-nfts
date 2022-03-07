@@ -13,37 +13,51 @@ contract Hero is ERC721 {
         //
     }
 
-    function mint() public {
+    function mint(uint blueprintId) public {
         
+        require(blueprintId < blueprints.length, "Invalid blueprint id");
+
         _tokenId += 1;
         _safeMint(msg.sender, _tokenId);
+
+        _tokenIdToBpId[_tokenId] = blueprintId;
     }
 
     //Blueprint
     event BlueprintAdded(uint index);
 
     struct Blueprint {
+        uint id;
         string name;
     }
 
     Blueprint[] blueprints;
+    mapping(uint => uint) private _tokenIdToBpId;
 
     function addBlueprint(string memory name) public {
+        
+        uint _index = blueprints.length;
+        
         Blueprint memory blueprint = Blueprint({
+            id: _index,
             name: name
         });
-
-        uint _index = blueprints.length;
+        
         blueprints.push(blueprint);
 
         emit BlueprintAdded(_index);
     }
     
-    function getBlueprint(uint index) public view returns(Blueprint memory) {
-        return blueprints[index];
+    function getBlueprint(uint id) public view returns(Blueprint memory) {
+        return blueprints[id];
     }
 
     function getBlueprints() public view returns(Blueprint[] memory) {
         return blueprints;
+    }
+
+    function getTokenBlueprint(uint tokenId) public view returns(Blueprint memory) {
+        require(tokenId <= blueprints.length, "tokenId doesn't exists");
+        return blueprints[_tokenIdToBpId[tokenId]];
     }
 }
