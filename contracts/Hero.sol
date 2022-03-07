@@ -13,9 +13,9 @@ contract Hero is ERC721 {
         //
     }
 
-    function mint(uint blueprintId) public {
-        
+    function mint(uint blueprintId) public payable {     
         require(blueprintId < blueprints.length, "Invalid blueprint id");
+        require(msg.value == blueprints[blueprintId].price, "Value not matching item's price");
 
         _tokenId += 1;
         _safeMint(msg.sender, _tokenId);
@@ -29,18 +29,20 @@ contract Hero is ERC721 {
     struct Blueprint {
         uint id;
         string name;
+        uint price;
     }
 
     Blueprint[] blueprints;
     mapping(uint => uint) private _tokenIdToBpId;
 
-    function addBlueprint(string memory name) public {
+    function addBlueprint(string memory name, uint price) public {
         
         uint _index = blueprints.length;
         
         Blueprint memory blueprint = Blueprint({
             id: _index,
-            name: name
+            name: name,
+            price: price
         });
         
         blueprints.push(blueprint);

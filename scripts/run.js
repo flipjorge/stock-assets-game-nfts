@@ -6,12 +6,12 @@ async function main() {
 
   console.log("Hero deployed to:", heroContract.address);
 
-  await heroContract.addBlueprint("Cratos");
-  await heroContract.addBlueprint("Aloy");
+  await heroContract.addBlueprint("Cratos", ethers.utils.parseEther("0.001"));
+  await heroContract.addBlueprint("Aloy", ethers.utils.parseEther("0.002"));
 
-  let mintTx = await heroContract.mint(0);
+  let mintTx = await heroContract.mint(0, {value:ethers.utils.parseEther("0.001")});
   await mintTx.wait();
-  mintTx = await heroContract.mint(1);
+  mintTx = await heroContract.mint(1, {value:ethers.utils.parseEther("0.002")});
   await mintTx.wait();
 }
 
