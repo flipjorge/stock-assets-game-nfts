@@ -4,9 +4,10 @@ pragma solidity ^0.8.12;
 
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Hero is ERC721, Ownable {
+contract Hero is ERC721Enumerable, Ownable {
 
     uint private _tokenId;
 
@@ -62,5 +63,27 @@ contract Hero is ERC721, Ownable {
     function getTokenBlueprint(uint tokenId) public view returns(Blueprint memory) {
         require(tokenId <= blueprints.length, "tokenId doesn't exists");
         return blueprints[_tokenIdToBpId[tokenId]];
+    }
+
+    //User tokens
+    function getUserTokensIds(address user) public view returns(uint[] memory) {
+        uint balance = balanceOf(user);
+        uint[] memory tokenIds = new uint[](balance);
+
+        for (uint256 i = 0; i < balance; i++)
+            tokenIds[i] = tokenOfOwnerByIndex(user,i);
+
+        return tokenIds;
+    }
+
+    function getUserTokensBlueprints(address user) public view returns(Blueprint[] memory) {
+        uint[] memory tokenIds = getUserTokensIds(user);
+        Blueprint[] memory tokenBlueprints = new Blueprint[](tokenIds.length);
+
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            tokenBlueprints[i] = getTokenBlueprint(tokenIds[i]);
+        }
+
+        return tokenBlueprints;
     }
 }

@@ -4,9 +4,9 @@ const { ethers } = require("hardhat");
 describe("Hero Tests", () => {
 
     let heroContract;
-    let owner;
     const price1 = ethers.utils.parseEther("0.001");
     const price2 = ethers.utils.parseEther("0.002");
+    const heroNames = ["Cratos", "Aloy", "Axel"];
 
     beforeEach(async () => {
         
@@ -15,8 +15,8 @@ describe("Hero Tests", () => {
 
         [owner, user1, user2] = await ethers.getSigners();
 
-        await heroContract.addBlueprint("Cratos", price1);
-        await heroContract.addBlueprint("Aloy", price2);
+        await heroContract.addBlueprint(heroNames[0], price1);
+        await heroContract.addBlueprint(heroNames[1], price2);
     });
 
     it("First mint should start with id 1", async () => {
@@ -104,6 +104,42 @@ describe("Hero Tests", () => {
         
         await expect(heroContract.connect(user1).addBlueprint("Axel", price1))
         .to.be.revertedWith("Ownable: caller is not the owner");
+    });
+
+    it("Getting user token balance", async () => {
+
+        await heroContract.mint(0, {value:price1});
+        await heroContract.mint(1, {value:price2});
+
+        await expect(await heroContract.balanceOf(owner.address)).to.be.equal(2);
+    });
+
+    it("Getting user tokens ids", async () => {
+
+        await heroContract.mint(0, {value:price1});
+        await heroContract.mint(1, {value:price2});
+
+        const tokenIds = await heroContract.getUserTokensIds(owner.address);
+
+        expect(tokenIds.length).to.be.equal(2);
+
+        for(let i = 0; i < tokenIds.length; i++) {
+            expect(tokenIds[i]).to.be.equal(i+1);
+        }
+    });
+
+    it("Getting user tokens blueprints", async () => {
+
+        await heroContract.mint(0, {value:price1});
+        await heroContract.mint(1, {value:price2});
+
+        const tokenBps = await heroContract.getUserTokensBlueprints(owner.address);
+
+        expect(tokenBps.length).to.be.equal(2);
+
+        for(let i = 0; i < tokenBps.length; i++) {
+            expect(tokenBps[i].name).to.be.equal(heroNames[i]);
+        }
     });
 
 });
