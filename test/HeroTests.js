@@ -13,7 +13,7 @@ describe("Hero Tests", () => {
         const heroContractFactory = await ethers.getContractFactory("Hero");
         heroContract = await heroContractFactory.deploy();
 
-        [owner] = await ethers.getSigners();
+        [owner, user1, user2] = await ethers.getSigners();
 
         await heroContract.addBlueprint("Cratos", price1);
         await heroContract.addBlueprint("Aloy", price2);
@@ -98,6 +98,12 @@ describe("Hero Tests", () => {
     it("Get blueprint with a invalid token id should revert", async() => {
         
         await expect(heroContract.getTokenBlueprint(10)).to.be.revertedWith("tokenId doesn't exists");
+    });
+
+    it("Calling addBlueprint method from not owner address should revert", async () => {
+        
+        await expect(heroContract.connect(user1).addBlueprint("Axel", price1))
+        .to.be.revertedWith("Ownable: caller is not the owner");
     });
 
 });
